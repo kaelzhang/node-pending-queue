@@ -73,3 +73,34 @@ test('sync loader', t => {
 
   return Promise.all(tasks)
 })
+
+
+test('value should not be cached', t => {
+  let counter = 0
+  const queue = new Queue({
+    load: () => {
+      return delay(100)
+      .then(() => {
+        return counter ++
+      })
+    }
+  })
+
+  const tasks = times(() => {
+    return queue.add().then((value) => {
+      t.is(value, 0)
+    })
+  }, 10)
+
+  return Promise.all(tasks)
+  .then(() => {
+    return delay(200)
+  })
+  .then(() => {
+    return queue.add()
+  })
+  .then((value) => {
+    t.is(value, 1)
+  })
+})
+
