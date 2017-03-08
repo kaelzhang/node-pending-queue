@@ -4,8 +4,9 @@ const delay = require('delay')
 
 function times (fn, time) {
   const tasks = []
-  while (time -- > 0) {
-    tasks.push(fn())
+  let counter = 0
+  while (counter < time) {
+    tasks.push(fn(counter ++))
   }
   return tasks
 }
@@ -104,3 +105,52 @@ test('value should not be cached', t => {
   })
 })
 
+
+test('addWithKey, multiple params, normal cases', t => {
+  let counter = 0
+  const queue = new Queue({
+    load: (a, b) => {
+      return delay(100)
+      .then(() => {
+        counter ++
+        return a + b
+      })
+    }
+  })
+
+  const tasks = times(() => {
+    return queue.addWithKey('a', 1, 2).then((value) => {
+      t.is(value, 3)
+    })
+  }, 10)
+
+  return Promise.all(tasks)
+  .then(() => {
+    t.is(counter, 1)
+  })
+})
+
+
+test('addWithKey, multiple params, changed keys', t => {
+  let counter = 0
+  const queue = new Queue({
+    load: (a, b) => {
+      return delay(100)
+      .then(() => {
+        counter ++
+        return a + b
+      })
+    }
+  })
+
+  const tasks = times((i) => {
+    return queue.addWithKey(i, 1, 2).then((value) => {
+      t.is(value, 3)
+    })
+  }, 10)
+
+  return Promise.all(tasks)
+  .then(() => {
+    t.is(counter, 10)
+  })
+})

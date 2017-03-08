@@ -67,6 +67,16 @@ run()
 
 Returns `Promise`
 
+## addWithKey(key, ...params)
+
+- **key** `String`
+
+Return `Promise`
+
+Specifies the key ourself, and avoid using `options.stringify` to serialize the key from `params`.
+
+But pay attension that there should be a consistent **one-to-one** match between `key` and `params`, or make sure that you exactly know what you are doing.
+
 ## License
 
 MIT

@@ -25,8 +25,17 @@ module.exports = class Queue extends EventEmitter {
   }
 
   add (...args) {
+    const stringify = this._stringify
+    return this._add(stringify(args), args)
+  }
+
+  addWithKey (key, ...args) {
+    return this._add(key, args)
+  }
+
+  _add (key, args) {
     return new Promise((resolve, reject) => {
-      this._add(args, (err, data) => {
+      this._run(key, args, (err, data) => {
         if (err) {
           return reject(err)
         }
@@ -36,9 +45,7 @@ module.exports = class Queue extends EventEmitter {
     })
   }
 
-  _add (args, callback) {
-    const key = this._stringify(args)
-
+  _run (key, args, callback) {
     this.on(key, callback)
     if (this.listenerCount(key) !== 1) {
       return
