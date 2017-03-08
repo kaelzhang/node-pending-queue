@@ -14,7 +14,7 @@
 
 # pending-queue
 
-<!-- description -->
+`pending-queue` ensures a certain asynchronous method only run once, and queues listeners which are registered to it.
 
 ## Install
 
@@ -56,7 +56,16 @@ run()
 // So the load function ran only once.
 ```
 
-##
+## new Queue({load, stringify})
+
+- **load** `function(...params)` the method to get the value
+- **stringify** `function(params)=JSON.stringify` stringify the parameters as the key to queue all asynchronous requests.
+
+## add(...params)
+
+- **params** `Arguments` which will be passed into `load`
+
+Returns `Promise`
 
 ## License
 
