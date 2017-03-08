@@ -25,8 +25,38 @@ $ npm install pending-queue --save
 ## Usage
 
 ```js
-const pending_queue = require('pending-queue')
+const Queue = require('pending-queue')
+
+let counter = 0
+const queue = new Queue({
+  load: (a, b) => {
+    return new Promise((resolve) => {
+      counter ++
+      setTimeout(() => {
+        resolve(a + b)
+      }, 100)
+    })
+  }
+})
+
+function run () {
+  queue.add(1, 2).then((value) => {
+    console.log(value, counter)
+  })
+}
+
+run()
+run()
+run()
+
+// 3, 1
+// 3, 1
+// 3, 1
+
+// So the load function ran only once.
 ```
+
+##
 
 ## License
 
