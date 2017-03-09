@@ -56,6 +56,7 @@ module.exports = class Queue extends EventEmitter {
     thenify(load(...args))
     .then(
       data => {
+        this.emit('load', key, data)
         this.emit(key, null, data)
         this.removeAllListeners(key)
       },

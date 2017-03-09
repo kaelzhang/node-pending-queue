@@ -154,3 +154,27 @@ test('addWithKey, multiple params, changed keys', t => {
     t.is(counter, 10)
   })
 })
+
+
+test('load event should be emitted once and only once for one task', t => {
+  let counter = 0
+  const queue = new Queue({
+    load: () => {
+      return delay(100)
+      .then(() => 1)
+    }
+  })
+  .on('load', (key, value) => {
+    t.is(value, 1, 'value should be 1')
+    counter ++
+  })
+
+  const tasks = times(() => {
+    return queue.add()
+  }, 10)
+
+  return Promise.all(tasks)
+  .then(() => {
+    t.is(counter, 1, 'counter should be 1')
+  })
+})

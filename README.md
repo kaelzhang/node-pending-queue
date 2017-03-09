@@ -63,13 +63,17 @@ run()
 
 Returns `EventEmitter`, and `key` as the event name, so you can use `queue.listenerCount(key)` to see if there are pending tasks.
 
-## add(...params)
+## Events
+
+- **load**
+
+## .add(...params)
 
 - **params** `Arguments` which will be passed into `load`
 
 Returns `Promise`
 
-## addWithKey(key, ...params)
+## .addWithKey(key, ...params)
 
 - **key** `String`
 
