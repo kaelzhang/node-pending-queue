@@ -1,6 +1,5 @@
 const {EventEmitter} = require('events')
 const assert = require('assert')
-const is = require('p-is-promise')
 
 module.exports = class Queue extends EventEmitter {
 
@@ -53,7 +52,7 @@ module.exports = class Queue extends EventEmitter {
 
     // Avoid load method to access the context of pending-queue
     const load = this._load
-    thenify(load(...args))
+    Promise.resolve(load(...args))
     .then(
       data => {
         this.emit('load', key, data)
@@ -67,11 +66,4 @@ module.exports = class Queue extends EventEmitter {
       }
     )
   }
-}
-
-
-function thenify (value) {
-  return is(value)
-    ? value
-    : Promise.resolve(value)
 }
